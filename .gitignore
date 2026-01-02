@@ -1,0 +1,16 @@
+#What we're hiding, never push virtual environments, secrets, local artifacts
+# Virtual environment
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment variables / secrets
+.env
+
+# OS junk
+.DS_Store
+
+# Logs / temporary files
+*.log
