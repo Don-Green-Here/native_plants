@@ -1,3 +1,6 @@
+-- 01_ingestion_schema.sql 
+
+USE native_plants; 
 CREATE TABLE IF NOT EXISTS states (
 state_code CHAR(2) PRIMARY KEY, 
 state_name VARCHAR(64) NOT NULL, 
@@ -16,7 +19,7 @@ url VARCHAR(512) NOT NULL,
 fetched_at DATETIME(6) NOT NULL,
 http_status SMALLINT NULL,
 content_type VARCHAR(128) NULL,
-body MEDIUMTEXT NULL,
+body LONGTEXT NULL,
 error TEXT NULL,
 INDEX idx_state_code (state_code),
 INDEX idx_fetched_at (fetched_at), 
