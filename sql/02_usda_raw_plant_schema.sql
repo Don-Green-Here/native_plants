@@ -37,7 +37,7 @@ CONSTRAINT fk_raw_usda_plants_fetch
 ALTER TABLE raw_usda_state_plants
   ADD COLUMN synonym_symbol_norm VARCHAR(16)
   GENERATED ALWAYS AS (IFNULL(synonym_symbol, '')) STORED;
-		#Will NULLs as an empty string so that NULL != NULL won't break unqiueness
+		#Will change NULLs to an empty string so that NULL != NULL won't break unqiueness
         #allows safe re-runs with the parser without duplications
         
 CREATE UNIQUE INDEX uq_raw_usda_fetch_symbol
