@@ -14,3 +14,11 @@ __pycache__/
 
 # Logs / temporary files
 *.log
+
+# Visual Files
+*.jpg
+*.jpeg
+*.png
+
+#State FIP codes
+fips_all.txt
