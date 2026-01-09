@@ -9,8 +9,8 @@ is_active TINYINT NOT NULL DEFAULT 1,
 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ); 
 
-# state_slug will be a "url" friendly name, ex/ north-carolina
-# TINYINT will default to 1, BOOLEAN logic
+--  state_slug will be a "url" friendly name, ex/ north-carolina
+--  TINYINT will default to 1, BOOLEAN logic
 
 CREATE TABLE IF NOT EXISTS state_fetches (
 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
