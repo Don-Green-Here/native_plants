@@ -119,13 +119,18 @@ def main() -> int:
         conn.close()
         return 0
 
+    except mysql.connector.Error as e:
+        print("MYSQL ERROR:", e.errno, e.sqlstate, e.msg, flush=True)
+        raise
+
     except (FileNotFoundError, ValueError, RuntimeError, MySQLError) as e:
         try:
             if "conn" in locals() and conn.is_connected():
                 conn.rollback()
-        except Exception:
-            pass
-        print(f"ERROR: {e}", file=sys.stderr)
+        except Exception as e:
+            print("ERROR TYPE:", type(e), flush=True)
+            print("ERROR:", str(e), flush=True)
+            raise
         return 1
 
 

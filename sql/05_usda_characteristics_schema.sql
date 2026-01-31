@@ -10,7 +10,8 @@ fetch_status ENUM ('HAS_DATA', 'NO_DATA', 'ERROR') NOT NULL,
 error TEXT NULL, 
 PRIMARY KEY (symbol), 
 INDEX idx_status (fetch_status), 
-CONSTRAINT fk_profile_symbol FOREIGN KEY (symbol) REFERENCES canonical_plants(symbol)
+CONSTRAINT fk_profile_symbol FOREIGN KEY (symbol) REFERENCES canonical_plants(symbol),
+UNIQUE KEY uq_profile_symbol (symbol)
 );
 
 CREATE TABLE IF NOT EXISTS plant_characteristics_fetches(
@@ -23,7 +24,8 @@ fetch_status ENUM ('HAS_DATA', 'NO_DATA', 'ERROR') NOT NULL,
 error TEXT NULL, 
 PRIMARY KEY (symbol), 
 INDEX idx_status (fetch_status), 
-CONSTRAINT fk_char_fetch_symbol FOREIGN KEY (symbol) REFERENCES canonical_plants(symbol)
+CONSTRAINT fk_char_fetch_symbol FOREIGN KEY (symbol) REFERENCES canonical_plants(symbol),
+UNIQUE KEY uq_char_symbol (symbol)
 ); 
 
 CREATE TABLE IF NOT EXISTS plant_characteristics_kv(

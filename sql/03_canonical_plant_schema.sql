@@ -42,7 +42,7 @@ CREATE TABLE IF NOT EXISTS plant_state_presence (
 ); 
 
 -- Table identifies if a plant has multiple symbols associated, it will help us reconcile duplicates 
--- Mirrors our plant_presence_table except is indexing on synonym_symbols
+
 CREATE TABLE IF NOT EXISTS plant_synonyms (
 	id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, 
 	fetch_id BIGINT UNSIGNED NOT NULL, 
