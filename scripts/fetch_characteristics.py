@@ -143,13 +143,21 @@ def build_driver(headful: bool) -> webdriver.Chrome:
 
 def get_rendered_html(driver: webdriver.Chrome, url: str, timeout_s: int) -> str:
     driver.get(url)
-    # Wait for any table rows to appear (more robust than waiting on text headers)
+
+    # Wait for the app shell / main content to exist, not for a table.
+    # This should succeed even when the characteristics are empty.
     WebDriverWait(driver, timeout_s).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, "table tr"))
+        EC.presence_of_element_located((By.CSS_SELECTOR, "main, app-root, body"))
     )
-    time.sleep(0.8)  # small extra hydration buffer
+
+    # Small hydration buffer
+    time.sleep(0.8)
+
     return driver.page_source
 
+def blocked(html: str) -> bool:
+    h = html.lower()
+    return ("access denied" in h) or ("unusual traffic" in h) or ("captcha" in h)
 
 def clean_text(s: str) -> str:
     return " ".join(s.replace("\u00a0", " ").split()).strip()
@@ -273,10 +281,10 @@ def extract_direct_traits(html: str) -> list[tuple[str, str, str]]:
     soup = BeautifulSoup(html, "lxml")
     kv = extract_rows_anywhere(soup)
     out: list[tuple[str, str, str]] = []
-    for name in DIRECT_TRAITS:
-        v = kv.get(name)
-        if v:
-            out.append((DIRECT_LOOKUP_SECTION, name, v))
+    for trait_name in DIRECT_TRAITS:
+        trait_value = kv.get(trait_name)
+        if trait_value:
+            out.append((DIRECT_LOOKUP_SECTION, trait_name, trait_value))
     return out
 
 
@@ -382,6 +390,10 @@ def main() -> int:
                 # CHARACTERISTICS
                 try:
                     char_html = get_rendered_html(driver, char_url, timeout_s)
+                    if blocked(char_html):
+                        upsert_fetch_status(cur, "plant_characteristics_fetches", symbol, char_url, fetched_at, "ERROR", "blocked_or_captcha")
+                        failed += 1
+                        continue
                     char_rows = []
                     char_rows.extend(extract_characteristics_tables(char_html))
                     char_rows.extend(extract_direct_traits(char_html))  # direct fallback
